@@ -1,0 +1,115 @@
+body{background-image:url('../img/tweed.png');}
+body{color:white;}
+.tableTitle{
+	font-size:20px;
+}
+.tableTitleSecond{
+	font-size: :16px;
+}
+.tableTitle,.tableTitleSecond{margin-top:15px;}
+td{
+	vertical-align: middle!important;
+}
+.toenter{
+	
+}
+.qualitatif legend{display:none;}
+.floatRight{float:right;}
+.mainRapport .form-group{margin:0;width:163px;display:inline-block;height:29px;}
+
+.btnAddLogement{float:right;}
+.inline{display:inline-block;}
+.nomargin{margin:0;}
+
+legend{margin:0;width:auto;}
+
+table td{border:0!important;
+	color:white;
+}
+a{
+	cursor: pointer;
+}
+.qualitatif{
+	margin-top:120px;
+	margin-bottom:53px;
+}
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{    background-color: #CDCDCD;}
+
+#radiMAn1VariationAn1M,#radioPAn1VariationAn1P,
+#radiMAn2VariationAn2M,#radioPAn2VariationAn2P,
+#radiMAn3VariationAn3M,#radioPAn3VariationAn3P,
+#radiMAn4VariationAn4M,#radioPAn4VariationAn4P,
+#radiMAn5VariationAn5M,#radioPAn5VariationAn5P{
+	margin-top: 10px;
+	margin-right:10px;
+}
+
+svg.main-svg {
+	background-color: transparent!important;
+}
+
+.login label{margin-right:20px;}
+.login .fa{text-shadow:none;margin:0;}
+.login .form-control{border-top-right-radius: 3px !important;border-bottom-right-radius: 3px !important;}
+.login h2{margin-top:0;}
+
+.remember_me label{padding:0;}
+.remember_me input,.tos input{position:relative !important;margin-left:0 !important;margin-right:10px;}
+
+.forgotmypass{margin-top:10px;}
+
+.btnLogin{margin-top: 10px;}
+
+.tableRevenuTotal{margin-top:35px;}
+
+.alert{padding:10px;}
+/*.alert .btn{    
+	background-color: transparent;
+	background: none;
+	border: 0;
+	box-shadow: none;
+	color: #5C5C5C;
+	position:absolute;
+	}*/
+	header{
+		height:1000px;
+		position:absolute!important;
+		top:0;
+		left:0;
+		z-index:0;
+	}
+	.navbar-default{
+		background-color:transparent;
+		background-image:none;
+	}
+	.navbar-inverse{
+		background-color: transparent;
+	}
+	.navbar.navbar-inverse{
+		border:0;
+	}
+	#mainNav{
+		border:0;
+	}
+	.well{
+		color:white;
+		border:0;
+		background-color: transparent;
+		margin-top: 60px;
+	}
+	h1{
+		font-weight: 700;
+	}
+	.alert{
+		position:relative;
+		z-index: 1;
+		margin-top: 65px;
+	}
+	.table-bordered{border:0!important;}
+	h3{margin-top: 3px;}
+	.mainRapport{margin-top:60px;}
+	.mainRapport h2{margin-bottom: 30px;}
+	.endRapport{position: fixed;bottom: 15px;right:15px;z-index: 1}
+	.mainRapport h4{margin-top: 30px;margin-bottom: 30px}
+	nav#mainNav{background-color: rgba(1,1,1,0.5)}
