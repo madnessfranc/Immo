@@ -91,7 +91,7 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-addon">$</div>
-									<?php echo $this->Form->input('remboursementMensuel',array('label'=>false,'class'=>'toenter form-control','placeholder'=>'Montant','value'=> (isset($rapport["remboursementMensuel"])) ? $rapport["remboursementMensuel"] : null)); ?>
+									<?php echo $this->Form->input('remboursementMensuel',array('label'=>false,'class'=>'toenter form-control','placeholder'=>'Montant','value'=> (isset($rapport["remboursementMensuel"])) ? $rapport["remboursementMensuel"] : null,'readonly'=>'readonly')); ?>
                                 </div>
                             </div>
                         </div>

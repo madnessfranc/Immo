@@ -167,7 +167,7 @@ class RapportsController extends AppController {
 		$rapport['totalRevenuAnnuel'] = nbr($rapport['totalRevenuMensuel'] * 12);
 		$nbrmonthly = ($rapport['tauxInteret']/100)/12;
 
-		$rapport['remboursementMensuel'] = ($rapport['terme'] > 0) ? number_format((float)($nbrmonthly / (1 - pow((1 + $nbrmonthly),($rapport['terme']*12)*-1))) * ($rapport['pret']*-1),2,'.','') : 0;
+		$rapport['remboursementMensuel'] = ($rapport['terme'] > 0) ? number_format((float)($nbrmonthly / (1 - pow((1 + $nbrmonthly),($rapport['terme']*12)*-1))) * ($rapport['pret']*1),2,'.','') : 0;
 
 		$this->set('grandeurOptions',array(
 			'1-1/2',
