@@ -12,7 +12,7 @@ function autoRemb() {
     autoPret();
     var t = (document.getElementById('RapportTerme').value > 0) ? document.getElementById('RapportTerme').value : 0;
     var m = (document.getElementById('RapportTauxInteret').value / 100) / 12;
-    var r = (t > 0) ? ((m / (1 - Math.pow((1 + m), (t * 12) * -1))) * (document.getElementById('RapportPret').value * -1)).toFixed(2) : 0;
+    var r = (t > 0) ? ((m / (1 - Math.pow((1 + m), (t * 12) * -1))) * (document.getElementById('RapportPret').value)).toFixed(2) : 0;
     document.getElementById('RapportRemboursementMensuel').value = r;
 }
 function randomNbr()
@@ -44,6 +44,10 @@ function addQuali() {
 }
 function valueStay(i) {
     $(i).attr('value', i.value);
+    var revenu = $(i).parents('tr:first').find($('[id*="RapportRevenuMensuel"]')).val();
+    var augmentation = $(i).parents('tr:first').find($('[id*="RapportPourcAugmentationAnnuelle"]')).val();
+    var total = Math.floor(parseInt(revenu) + ((revenu * augmentation) / 100));
+    $(i).parents('tr:first').find($('[id*="RapportLtotalRevenu"]')).val(total);
 }
 function togglePourcB() {
     $('#RapportAn1Montant').attr('readonly', 'readonly');
@@ -155,7 +159,15 @@ function toggleMontantAn5() {
     $('#RapportAn5Pourc').attr('readonly', 'readonly');
     $('#radiMAn5VariationAn5M').prop('checked', true);
 }
+
+$('#RapportLoadForm').submit(function (evt) {
+        alert("allo");
+        evt.preventDefault();
+        window.history.back();
+    });
 function checkThese() {
+    var submit = false;
+    
     if (
             document.getElementById('RapportTaxeMunicipale').value == 0 &&
             document.getElementById('RapportPourcAugmentationAnnuelleTaxeMunicipale').value == 0 &&
@@ -183,17 +195,22 @@ function checkThese() {
             document.getElementById('RapportPourcAugmentationAnnuelleAutres').value == 0
             )
     {
+        event.preventDefault();
+        $('#dialog-confirm').text('Êtes-vous certain que vous ne voulez pas mettre de valeur dans la section Dépenses d\'exploitation récurrentes?');
         $(function() {
+            
             $( "#dialog-confirm" ).dialog({
               resizable: false,
               height:140,
               modal: true,
               buttons: {
                 "Oui": function() {
-                  
+                    $('#RapportLoadForm').submit();
+                    $(this).dialog( "close" );
                 },
                 "Non": function() {
-                  return false
+                    submit = false;
+                    $(this).dialog( "close" );
                 }
               }
             });
@@ -210,9 +227,11 @@ function checkThese() {
             document.getElementById('RapportTaxeBienvenu').value == 0 &&
             document.getElementById('RapportPhaseEnvironnementale').value == 0 &&
             document.getElementById('RapportInspection').value == 0 &&
-            document.getElementById('RapportEvaluationProfessionnel').value == 0
+            document.getElementById('RapportEvaluationProfessionnel').value == 0 
             )
     {
+        event.preventDefault();
+        $('#dialog-confirm').text('Êtes-vous certain que vous ne voulez pas mettre de valeur dans la section Dépenses initiales?');
         $(function() {
             $( "#dialog-confirm" ).dialog({
               resizable: false,
@@ -220,20 +239,27 @@ function checkThese() {
               modal: true,
               buttons: {
                 "Oui": function() {
-                  
+                    $('#RapportLoadForm').submit();
+                    $(this).dialog( "close" );
                 },
                 "Non": function() {
-                  return false
+                    submit = false;
+                    $(this).dialog( "close" );
                 }
               }
             });
-        });        
-        //if (!window.confirm('Êtes-vous certain que vous ne voulez pas mettre de valeur dans la section Dépenses initiales?'))
-        //{
-            //return false;
-        //}
+        });
     }
-
-    return true;
+        
+    if (submit){
+        $('#RapportLoadForm').submit();
+    }
+    //if (!window.confirm('Êtes-vous certain que vous ne voulez pas mettre de valeur dans la section Dépenses initiales?'))
+    //{
+        //return false;
+    //}
 }
+
+    //return true;
+
 
