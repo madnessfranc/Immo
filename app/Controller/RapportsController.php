@@ -71,7 +71,8 @@ class RapportsController extends AppController {
 								$this->Rapport->Logement->set('grandeur', $this->request->data['Rapport']['grandeur'.$number]);
 								$this->Rapport->Logement->set('revenuMensuel', $this->request->data['Rapport']['revenuMensuel'.$number]);
 								$this->Rapport->Logement->set('pourcAugmentationAnnuelle', $this->request->data['Rapport']['pourcAugmentationAnnuelle'.$number]);
-								$this->Rapport->Logement->set('pourcRevenus', $this->request->data['Rapport']['pourcRevenus'.$number]);
+                                                                $total = ($this->request->data['Rapport']['totalRevenuAnnuel'] > 0) ? ($this->request->data['Rapport']['revenuMensuel'.$number] > 0) ? nbr((($this->request->data['Rapport']['revenuMensuel'.$number] * $this->request->data['Rapport']['nbDeLoyer'.$number]) * 100) / $this->request->data['Rapport']['totalRevenuMensuel']) : 0 : 0;
+                                                                $this->Rapport->Logement->set('pourcRevenus', $total);
 								$this->Rapport->Logement->set('LtotalRevenu', $this->request->data['Rapport']['LtotalRevenu'.$number]);
 								$this->Rapport->Logement->save();
 							}
@@ -81,7 +82,8 @@ class RapportsController extends AppController {
 								$this->Rapport->Logement->set('grandeur',$this->request->data['Rapport']['grandeur'.$number]);
 								$this->Rapport->Logement->set('revenuMensuel',$this->request->data['Rapport']['revenuMensuel'.$number]);
 								$this->Rapport->Logement->set('pourcAugmentationAnnuelle',$this->request->data['Rapport']['pourcAugmentationAnnuelle'.$number]);
-								$this->Rapport->Logement->set('pourcRevenus',$this->request->data['Rapport']['pourcRevenus'.$number]);
+                                                                $total = ($this->request->data['Rapport']['totalRevenuAnnuel'] > 0) ? ($this->request->data['Rapport']['revenuMensuel'.$number] > 0) ? nbr((($this->request->data['Rapport']['revenuMensuel'.$number] * $this->request->data['Rapport']['nbDeLoyer'.$number]) * 100) / $this->request->data['Rapport']['totalRevenuMensuel']) : 0 : 0;
+                                                                $this->Rapport->Logement->set('pourcRevenus',$total);
 								$this->Rapport->Logement->set('LtotalRevenu',$this->request->data['Rapport']['LtotalRevenu'.$number]);
 								$this->Rapport->Logement->set('rapportId',$id);
 								$this->Rapport->Logement->save();
@@ -192,8 +194,9 @@ class RapportsController extends AppController {
 		foreach ($rapport as $key => $value) {
 			if (strpos($key,'revenuMensuel') !== false){
 				$number = substr($key, 13);
-				$rapport['pourcRevenus'.$number] = ($rapport['totalRevenuAnnuel'] > 0) ? nbr(toPourc($value / $rapport['totalRevenuAnnuel'])) : 0; //here
-				$rapport['LtotalRevenu'.$number] = nbr($rapport['revenuMensuel'.$number] * (1 + fromPourc($rapport['pourcAugmentationAnnuelle'.$number])));
+				//$rapport['pourcRevenus'.$number] = ($rapport['totalRevenuAnnuel'] > 0) ? nbr(toPourc($value / $rapport['totalRevenuAnnuel'])) : 0; //here
+                                $rapport['pourcRevenus'.$number] = ($rapport['totalRevenuAnnuel'] > 0) ? nbr($rapport['totalRevenuAnnuel'] / ($rapport['revenuMensuel'] * $rapport['nbDeLoyer'])) : 0;
+                                $rapport['LtotalRevenu'.$number] = nbr($rapport['revenuMensuel'.$number] * (1 + fromPourc($rapport['pourcAugmentationAnnuelle'.$number])));
 
 				$this->Rapport->Logement->create();
 				$this->Rapport->Logement->set('nbDeLoyer',$rapport['nbDeLoyer'.$number]);
@@ -208,7 +211,7 @@ class RapportsController extends AppController {
 		}
 
 		$rapport['pourcTotalRevenu'] = ($rapport['totalRevenuAnnuel'] > 0) ? nbr(toPourc($rapport['totalRevenuMensuel'] / $rapport['totalRevenuAnnuel'])) : 0; //here
-		$rapport['pourcTotalAugmentationAnnuelle'] = ($rapport['totalRevenuAnnuel'] > 0) ? nbr(toPourc(fromPourc($rapport['pourcTotalRevenu']) / $rapport['totalRevenuAnnuel'])) : 0; //here
+		$rapport['pourcTotalAugmentationAnnuelle'] = ($rapport['totalRevenuAnnuel'] > 0) ? nbr(toPourc($rapport['pourcTotalRevenu']) / $rapport['totalRevenuAnnuel']) : 0; //here
 
 		$rapport['totalRevenuAnnuel'] = nbr($rapport['totalRevenuMensuel'] * 12);
 		$rapport['totalTotalRevenuAnnuel'] = nbr($rapport['totalTotalRevenuMensuel'] * 12);
