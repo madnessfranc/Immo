@@ -258,8 +258,6 @@ class RapportsController extends AppController {
 		$rapport['totalDeneigement'] = nbr($rapport['Deneigement'] * (1 + fromPourc($rapport['pourcAugmentationAnnuelleDeneigement'])));
 
 		$rapport['totalTonteDePelouse'] = nbr($rapport['TonteDePelouse'] * (1 + fromPourc($rapport['pourcAugmentationAnnuelleTonteDePelouse'])));
-
-                pr($rapport['totalDépensesAnnuel']);
 		
                 $rapport['totalConciergerie'] = nbr($rapport['montantConciergerie'] * (1 + fromPourc($rapport['pourcAugmentationAnnuelleConciergerie'])));
 		$rapport['Conciergerie'] = nbr($rapport['montantConciergerie'] * $rapport['totalNbrLogement'] * 12);
@@ -293,20 +291,20 @@ class RapportsController extends AppController {
 			);
                 
                 
-                $rapport['pourcTaxeMunicipalePoids'] = ($rapport['totalDépensesAnnuel'] > 0) ? nbr($rapport['taxeMunicipale'] / $rapport['totalDépensesAnnuel']*100) : 0; //here
-		$rapport['pourcRevenuTaxeScolaire'] = ($rapport['totalDépensesAnnuel'] > 0) ? $rapport['pourcTaxeScolairePoids'] = nbr(($rapport['taxeScolaire']*100) / $rapport['totalDépensesAnnuel']) : 0; //here
-                $rapport['pourcRevenuAssurances'] = ($rapport['totalDépensesAnnuel'] > 0) ? $rapport['pourcAssurancesPoids'] = nbr(($rapport['Assurances']*100) / $rapport['totalDépensesAnnuel']) : 0;
-                $rapport['pourcRevenuElectricite'] = ($rapport['totalDépensesAnnuel'] > 0) ? $rapport['pourcElectricitePoids'] = nbr(($rapport['Electricite']*100) / $rapport['totalDépensesAnnuel']) : 0;
-		$rapport['pourcRevenuChauffage'] = ($rapport['totalDépensesAnnuel'] > 0) ? $rapport['pourcChauffagePoids'] = nbr(($rapport['Chauffage']*100) / $rapport['totalDépensesAnnuel']) : 0;
-		$rapport['pourcRevenuDeneigement'] = ($rapport['totalDépensesAnnuel'] > 0) ? $rapport['pourcDeneigementPoids'] = nbr(($rapport['Deneigement'] * 100) / $rapport['totalDépensesAnnuel']) : 0;
-		$rapport['pourcRevenuTonteDePelouse'] = ($rapport['totalDépensesAnnuel'] > 0) ? $rapport['pourcTonteDePelousePoids'] = nbr(($rapport['TonteDePelouse'] * 100) / $rapport['totalDépensesAnnuel']) : 0;
+                $rapport['pourcTaxeMunicipalePoids'] = ($rapport['totalRevenuAnnuel'] > 0) ? nbr($rapport['taxeMunicipale'] / $rapport['totalRevenuAnnuel']*100) : 0; //here
+		$rapport['pourcRevenuTaxeScolaire'] = ($rapport['totalRevenuAnnuel'] > 0) ? $rapport['pourcTaxeScolairePoids'] = nbr(($rapport['taxeScolaire']*100) / $rapport['totalRevenuAnnuel']) : 0; //here
+                $rapport['pourcRevenuAssurances'] = ($rapport['totalRevenuAnnuel'] > 0) ? $rapport['pourcAssurancesPoids'] = nbr(($rapport['Assurances']*100) / $rapport['totalRevenuAnnuel']) : 0;
+                $rapport['pourcRevenuElectricite'] = ($rapport['totalRevenuAnnuel'] > 0) ? $rapport['pourcElectricitePoids'] = nbr(($rapport['Electricite']*100) / $rapport['totalRevenuAnnuel']) : 0;
+		$rapport['pourcRevenuChauffage'] = ($rapport['totalRevenuAnnuel'] > 0) ? $rapport['pourcChauffagePoids'] = nbr(($rapport['Chauffage']*100) / $rapport['totalRevenuAnnuel']) : 0;
+		$rapport['pourcRevenuDeneigement'] = ($rapport['totalRevenuAnnuel'] > 0) ? $rapport['pourcDeneigementPoids'] = nbr(($rapport['Deneigement'] * 100) / $rapport['totalRevenuAnnuel']) : 0;
+		$rapport['pourcRevenuTonteDePelouse'] = ($rapport['totalRevenuAnnuel'] > 0) ? $rapport['pourcTonteDePelousePoids'] = nbr(($rapport['TonteDePelouse'] * 100) / $rapport['totalRevenuAnnuel']) : 0;
 		
-                $rapport['pourcRevenuConciergerie'] = ($rapport['totalDépensesAnnuel'] > 0) ? $rapport['pourcConciergeriePoids'] = nbr((($rapport['montantConciergerie'] * $rapport['totalNbrLogement'] * 12) * 100) / $rapport['totalDépensesAnnuel']) : 0;
-                $rapport['pourcRevenuEntretienEtReparation'] = ($rapport['totalDépensesAnnuel'] > 0) ? $rapport['pourcEntretienEtReparationPoids'] = nbr((($rapport['montantEntretienEtReparation'] * $rapport['totalNbrLogement']) * 100) / $rapport['totalDépensesAnnuel']) : 0;
+                $rapport['pourcRevenuConciergerie'] = ($rapport['totalRevenuAnnuel'] > 0) ? $rapport['pourcConciergeriePoids'] = nbr((($rapport['montantConciergerie'] * $rapport['totalNbrLogement'] * 12) * 100) / $rapport['totalRevenuAnnuel']) : 0;
+                $rapport['pourcRevenuEntretienEtReparation'] = ($rapport['totalRevenuAnnuel'] > 0) ? $rapport['pourcEntretienEtReparationPoids'] = nbr((($rapport['montantEntretienEtReparation'] * $rapport['totalNbrLogement']) * 100) / $rapport['totalRevenuAnnuel']) : 0;
                 
-                $rapport['pourcRevenuAdministration'] = ($rapport['totalDépensesAnnuel'] > 0) ? $rapport['pourcAdministrationPoids'] = nbr(($rapport['Administration']*100) / $rapport['totalDépensesAnnuel']) : 0;
-		$rapport['pourcRevenuFraisDeGestion'] = ($rapport['totalDépensesAnnuel'] > 0) ? $rapport['pourcFraisDeGestionPoids'] = nbr(($rapport['FraisDeGestion']*100) / $rapport['totalDépensesAnnuel']) : 0;
-		$rapport['pourcRevenuAutres'] = ($rapport['totalDépensesAnnuel'] > 0) ? $rapport['pourcAutresPoids'] = nbr(($rapport['Autres']*100) / $rapport['totalDépensesAnnuel']) : 0;
+                $rapport['pourcRevenuAdministration'] = ($rapport['totalRevenuAnnuel'] > 0) ? $rapport['pourcAdministrationPoids'] = nbr(($rapport['Administration']*100) / $rapport['totalRevenuAnnuel']) : 0;
+		$rapport['pourcRevenuFraisDeGestion'] = ($rapport['totalRevenuAnnuel'] > 0) ? $rapport['pourcFraisDeGestionPoids'] = nbr(($rapport['FraisDeGestion']*100) / $rapport['totalRevenuAnnuel']) : 0;
+		$rapport['pourcRevenuAutres'] = ($rapport['totalRevenuAnnuel'] > 0) ? $rapport['pourcAutresPoids'] = nbr(($rapport['Autres']*100) / $rapport['totalRevenuAnnuel']) : 0;
 		
                 
                 
