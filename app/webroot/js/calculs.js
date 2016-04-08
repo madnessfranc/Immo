@@ -160,14 +160,7 @@ function toggleMontantAn5() {
     $('#radiMAn5VariationAn5M').prop('checked', true);
 }
 
-$('#RapportLoadForm').submit(function (evt) {
-        alert("allo");
-        evt.preventDefault();
-        window.history.back();
-    });
 function checkThese() {
-    var submit = false;
-    
     if (
             document.getElementById('RapportTaxeMunicipale').value == 0 &&
             document.getElementById('RapportPourcAugmentationAnnuelleTaxeMunicipale').value == 0 &&
@@ -197,69 +190,83 @@ function checkThese() {
     {
         event.preventDefault();
         $('#dialog-confirm').text('Êtes-vous certain que vous ne voulez pas mettre de valeur dans la section Dépenses d\'exploitation récurrentes?');
-        $(function() {
-            
-            $( "#dialog-confirm" ).dialog({
-              resizable: false,
-              height:140,
-              modal: true,
-              buttons: {
-                "Oui": function() {
-                    $('#RapportLoadForm').submit();
-                    $(this).dialog( "close" );
-                },
-                "Non": function() {
-                    submit = false;
-                    $(this).dialog( "close" );
+        $(function () {
+            $("#dialog-confirm").dialog({
+                resizable: false,
+                height: 140,
+                modal: true,
+                draggable: false,
+                buttons: {
+                    "Oui": function () {
+                        $(this).dialog("close");
+                        if (
+                                document.getElementById('RapportNotaire').value == 0 &&
+                                document.getElementById('RapportFraisOuvertureDossier').value == 0 &&
+                                document.getElementById('RapportTaxeBienvenu').value == 0 &&
+                                document.getElementById('RapportPhaseEnvironnementale').value == 0 &&
+                                document.getElementById('RapportInspection').value == 0 &&
+                                document.getElementById('RapportEvaluationProfessionnel').value == 0
+                                )
+                        {
+                            event.preventDefault();
+                            $('#dialog-confirm').text('Êtes-vous certain que vous ne voulez pas mettre de valeur dans la section Dépenses initiales?');
+                            $(function () {
+                                $("#dialog-confirm").dialog({
+                                    resizable: false,
+                                    height: 140,
+                                    modal: true,
+                                    buttons: {
+                                        "Oui": function () {
+                                            $('#RapportLoadForm').submit();
+                                            $(this).dialog("close");
+                                        },
+                                        "Non": function () {
+                                            $(this).dialog("close");
+                                        }
+                                    }
+                                });
+                            });
+                        } else {
+                            $('#RapportLoadForm').submit();
+                        }
+                    },
+                    "Non": function () {
+                        $(this).dialog("close");
+                        if (
+                                document.getElementById('RapportNotaire').value == 0 &&
+                                document.getElementById('RapportFraisOuvertureDossier').value == 0 &&
+                                document.getElementById('RapportTaxeBienvenu').value == 0 &&
+                                document.getElementById('RapportPhaseEnvironnementale').value == 0 &&
+                                document.getElementById('RapportInspection').value == 0 &&
+                                document.getElementById('RapportEvaluationProfessionnel').value == 0
+                                )
+                        {
+                            event.preventDefault();
+                            $('#dialog-confirm').text('Êtes-vous certain que vous ne voulez pas mettre de valeur dans la section Dépenses initiales?');
+                            $(function () {
+                                $("#dialog-confirm").dialog({
+                                    resizable: false,
+                                    height: 140,
+                                    modal: true,
+                                    buttons: {
+                                        "Oui": function () {
+                                            $('#RapportLoadForm').submit();
+                                            $(this).dialog("close");
+                                        },
+                                        "Non": function () {
+                                            $(this).dialog("close");
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    }
                 }
-              }
             });
         });
-          
-        //if (!window.confirm('Êtes-vous certain que vous ne voulez pas mettre de valeur dans la section Dépenses d\'exploitation récurrentes?'))
-        //{
-           // return false;
-        //}
     }
-    if (
-            document.getElementById('RapportNotaire').value == 0 &&
-            document.getElementById('RapportFraisOuvertureDossier').value == 0 &&
-            document.getElementById('RapportTaxeBienvenu').value == 0 &&
-            document.getElementById('RapportPhaseEnvironnementale').value == 0 &&
-            document.getElementById('RapportInspection').value == 0 &&
-            document.getElementById('RapportEvaluationProfessionnel').value == 0 
-            )
-    {
-        event.preventDefault();
-        $('#dialog-confirm').text('Êtes-vous certain que vous ne voulez pas mettre de valeur dans la section Dépenses initiales?');
-        $(function() {
-            $( "#dialog-confirm" ).dialog({
-              resizable: false,
-              height:140,
-              modal: true,
-              buttons: {
-                "Oui": function() {
-                    $('#RapportLoadForm').submit();
-                    $(this).dialog( "close" );
-                },
-                "Non": function() {
-                    submit = false;
-                    $(this).dialog( "close" );
-                }
-              }
-            });
-        });
-    }
-        
-    if (submit){
-        $('#RapportLoadForm').submit();
-    }
-    //if (!window.confirm('Êtes-vous certain que vous ne voulez pas mettre de valeur dans la section Dépenses initiales?'))
-    //{
-        //return false;
-    //}
+
 }
 
-    //return true;
 
 

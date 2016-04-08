@@ -15,11 +15,11 @@
             </div>
         </div>
     </div>
-    
-    <div id="dialog-confirm" title="Empty the recycle bin?">
-        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>These items will be permanently deleted and cannot be recovered. Are you sure?</p>
+
+    <div id="dialog-confirm" title="Attention">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span></p>
     </div>
-    
+
     <div class="table-responsive">
         <table class="table table-bordered text-center">
             <tbody>
@@ -1285,7 +1285,7 @@
                     <div class="">
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon">$</div>
+                                <div class="input-group-addon">%</div>
 									<?php echo $this->Form->input('profit',array('label'=>false,'class'=>'maskMoney form-control','value'=> (isset($rapport["profit"])) ? $rapport["profit"] : null,'readonly'=>'readonly')); ?>
                             </div>
                         </div>
