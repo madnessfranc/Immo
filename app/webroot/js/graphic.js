@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-
+$(document).ready(function() {
 var data = [{
 		values: [
 		document.getElementById('RapportPourcTaxeMunicipalePoids').value, 
@@ -26,7 +26,12 @@ var data = [{
 
 	var layout = {
 		height: 500,
-		width: 500
+		width: 500,
+                font:{
+                    color:'blue'
+                }
+                        
+                
 	};
 
 	Plotly.newPlot('graphDepenses', data, layout);
@@ -52,6 +57,7 @@ var data = [{
 		type: 'pie',
 		hole: .5
 	}];
+    
 
 	Plotly.newPlot('graphRevenu', data, layout);
 
@@ -95,8 +101,22 @@ var data = [{
 	};
 
 	var data = [cashFlowStat, equityBuiltStat,plusValueStat];
+        
+        var Layout = {
+                xaxis: {
+                    tickfont: {
+                        color: '#ffffff',
+                        tickangle: 45,
+                    }
+                },
+                yaxis: {
+                    tickfont: {
+                        color: '#ffffff'
+                    }
+                }
+            }
 
-	Plotly.newPlot('graphRendement', data);
+	Plotly.newPlot('graphRendement', data, Layout);
 
 	var cf = {
 		x: ['an 1', 'an 2', 'an 3', 'an 4','an 5'],
@@ -139,6 +159,21 @@ var data = [{
 
 	var data = [cf, eb, pv];
 
-	var layout3 = {barmode: 'stack'};
+	var layout3 = {
+            barmode: 'stack',
+            xaxis: {
+                tickfont: {
+                    color: '#ffffff',
+                    tickangle: 45,
+                }
+            },
+            yaxis: {
+                tickfont: {
+                    color: '#ffffff'
+                }
+            }
+        };
 
 	Plotly.newPlot('graphGraphique', data, layout3);
+        
+});
