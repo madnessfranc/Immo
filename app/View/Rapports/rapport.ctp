@@ -892,7 +892,7 @@
             </tr>
             <tr>
                 <td>Conciergerie</td>
-                <td>$/logement/mois</td>
+                <td>$*logement*mois</td>
                 <td>
                     <div class="">
                         <div class="form-group">
@@ -956,7 +956,7 @@
             </tr>
             <tr>
                 <td>Entretien et réparation</td>
-                <td>$/logement/an</td>
+                <td>$*logement*an</td>
                 <td>
                     <div class="">
                         <div class="form-group">
