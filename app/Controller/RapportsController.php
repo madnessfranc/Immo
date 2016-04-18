@@ -496,7 +496,7 @@ class RapportsController extends AppController {
 		$n = 11;
 
 		for ($i=1; $i < 6; $i++) { 
-			if ($i < 5){
+			if ($i < 6){
 				$rapport['montantRendementCashFlowAn'.$i] = nbr($rapport['arrayRendement'][$n]->soldeFinCashFlow);
 			}
 			else{

@@ -326,7 +326,7 @@
             <tbody>
                 <tr>
                     <td></td>
-                    <td>Total grandeur</td>
+                    <td></td>
                     <td>Total revenu</td>
                     <td>Total % des revenus</td>
                     <td>Total augmentation annuelle</td>
@@ -335,14 +335,7 @@
                 <tr>
                     <td>Total revenu mensuel</td>
                     <td>
-                        <div class="">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <div class="input-group-addon">U</div>
-										<?php echo $this->Form->input('totalGrandeur',array('label'=>false,'class'=>'maskMoney form-control','value'=> (isset($rapport["totalGrandeur"])) ? $rapport["totalGrandeur"] : null,'readonly'=>'readonly')); ?>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </td>
                     <td>
                         <div class="">
