@@ -140,7 +140,7 @@ class RapportsController extends AppController {
 				$rapport['totalRevenuMensuel'] += nbr($value['Logement']['revenuMensuel'] * $value['Logement']['nbDeLoyer']);
 				$rapport['totalNbrLogement'] += nbr($value['Logement']['nbDeLoyer']);
 				$rapport['totalGrandeur'] += nbr($value['Logement']['grandeur']);
-				$rapport['totalTotalRevenuMensuel'] += nbr(nbr($value['Logement']['revenuMensuel'] * (1 + fromPourc($value['Logement']['pourcAugmentationAnnuelle']))));
+				$rapport['totalTotalRevenuMensuel'] += nbr($value['Logement']['revenuMensuel'] * $value['Logement']['nbDeLoyer']) * (1 + fromPourc($value['Logement']['pourcAugmentationAnnuelle']));
 			}
 			//debug($logements);
 
@@ -155,7 +155,7 @@ class RapportsController extends AppController {
 				if (strpos($key,'revenuMensuel') !== false){
 					$rapport['totalRevenuMensuel'] += nbr($value) * $totalNbrLog;
 					$number = substr($key, 13);
-					$rapport['LtotalRevenu'.$number] = nbr($rapport['revenuMensuel'.$number] * (1 + fromPourc($rapport['pourcAugmentationAnnuelle'.$number])));
+					$rapport['LtotalRevenu'.$number] = (nbr($rapport['revenuMensuel'.$number] * (1 + fromPourc($rapport['pourcAugmentationAnnuelle'.$number])))) * nbr(rapport['nbDeLoyer'.$number]);
 				}
 				if (strpos($key,'grandeur') !== false){
 					$rapport['totalGrandeur'] += nbr($value);
@@ -211,11 +211,11 @@ class RapportsController extends AppController {
 		}
 
 		$rapport['pourcTotalRevenu'] = ($rapport['totalRevenuAnnuel'] > 0) ? nbr(toPourc($rapport['totalRevenuMensuel'] / $rapport['totalRevenuAnnuel'])) : 0; //here
-		$rapport['pourcTotalAugmentationAnnuelle'] = ($rapport['totalRevenuAnnuel'] > 0) ? nbr(toPourc($rapport['pourcTotalRevenu']) / $rapport['totalRevenuAnnuel']) : 0; //here
+		$rapport['pourcTotalAugmentationAnnuelle'] = ($rapport['totalRevenuAnnuel'] > 0) ? nbr((($rapport['totalTotalRevenuMensuel'] - $rapport['totalRevenuMensuel']) / $rapport['totalRevenuMensuel']) * 100) : 0; //here
 
 		$rapport['totalRevenuAnnuel'] = nbr($rapport['totalRevenuMensuel'] * 12);
 		$rapport['totalTotalRevenuAnnuel'] = nbr($rapport['totalTotalRevenuMensuel'] * 12);
-		$rapport['totalPourcAugmentationAnnuelle'] = ($rapport['totalRevenuAnnuel'] > 0) ? nbr(($rapport['totalTotalRevenuAnnuel'] / $rapport['totalRevenuAnnuel']) - 1) : 0; //here
+		$rapport['totalPourcAugmentationAnnuelle'] = ($rapport['totalRevenuAnnuel'] > 0) ? nbr($rapport['pourcTotalAugmentationAnnuelle']) : 0; //here
 		$rapport['totalMauvaiseCreances'] = nbr($rapport['totalRevenuAnnuel'] * fromPourc($rapport['pourcMauvaiseCreances']));
 		$rapport['totalVacances'] = nbr($rapport['totalRevenuAnnuel'] * fromPourc($rapport['pourcVacances']));
 
@@ -346,7 +346,7 @@ class RapportsController extends AppController {
 			$rapport['inspection'] +
 			$rapport['evaluationProfessionnel']
 			);
-		$rapport['pourcTotalAugmentationAnnuelle'] = ($rapport['totalDépensesAnnuel'] > 0) ? nbr(toPourc(($rapport['totalTotalDépenses'] / $rapport['totalDépensesAnnuel']) - 1)) : 0;
+		//$rapport['pourcTotalAugmentationAnnuelle'] = ($rapport['totalDépensesAnnuel'] > 0) ? nbr(toPourc(($rapport['totalTotalDépenses'] / $rapport['totalDépensesAnnuel']) - 1)) : 0;
 
 		$rapport['arrayRendement'] = array();
 
@@ -365,7 +365,7 @@ class RapportsController extends AppController {
 
 		foreach ($rapport['arrayRendement'] as $key => $value) {
 			if ($ii < 12){
-				$rapport['paiementDeLaDette'] += $value->hypotheque;
+				$rapport['paiementDeLaDette'] += $value->hypotheque *-1;
 			}
 			$ii++;
 		}
@@ -472,10 +472,10 @@ class RapportsController extends AppController {
 		}
 
 		$rapport['montantTotalPiece'] = ($rapport['totalNbrPiece'] > 0) ? nbr($rapport['prixPaye'] / $rapport['totalNbrPiece']) : 0;
-		$rapport['pourcMRB'] = ($rapport['totalRBE'] > 0) ? nbr(toPourc($rapport['prixPaye'] / $rapport['totalRBE'])) : 0;
-		$rapport['pourcMRN'] = ($rapport['revenuNet'] > 0) ? nbr(toPourc($rapport['prixPaye'] / $rapport['revenuNet'])) : 0;
+		$rapport['pourcMRB'] = ($rapport['totalRBE'] > 0) ? nbr($rapport['prixPaye'] / $rapport['totalRBE']) : 0;
+		$rapport['pourcMRN'] = ($rapport['revenuNet'] > 0) ? nbr($rapport['prixPaye'] / $rapport['revenuNet']) : 0;
 		$rapport['pourcRDE'] = ($rapport['totalRBE'] > 0) ? nbr(toPourc($rapport['totalDépensesAnnuel'] / $rapport['totalRBE'])) : 0;
-		$rapport['pourcRCD'] = ($rapport['paiementDeLaDette'] > 0) ? nbr(toPourc($rapport['revenuNet'] / $rapport['paiementDeLaDette'])) : 0;
+		$rapport['pourcRCD'] = ($rapport['paiementDeLaDette'] > 0) ? nbr($rapport['revenuNet'] / $rapport['paiementDeLaDette']) : 0;
 		$rapport['pourcTGA'] = ($rapport['prixPaye'] > 0) ? nbr(toPourc($rapport['revenuNet'] / $rapport['prixPaye'])) : 0;
 		$rapport['pourcRatioEndettement'] = ($rapport['prixPaye'] > 0 && $rapport['totalDépensesInitiales'] > 0) ? nbr(toPourc($rapport['pret'] / ($rapport['prixPaye'] + $rapport['totalDépensesInitiales']))) : 0;
 		$rapport['pourcTMO'] = nbr(78.32); /* pas de formule */
@@ -489,38 +489,36 @@ class RapportsController extends AppController {
 		$rapport['montantPlusValue'] = nbr($rapport['an1Total'] - $rapport['prixPaye']);
 		$rapport['pourcTotalRendementParAnnee'] = nbr($rapport['pourcEvolutionCashFlow'] + $rapport['pourcEquityBuilt'] + $rapport['pourcPlusValue']);
 		$rapport['montantTotalRendementParAnnee'] = nbr($rapport['montantEvolutionCashFlow'] + $rapport['montantEquityBuilt'] + $rapport['montantPlusValue']);
-		$rapport['totalTotalRendement'] = nbr($rapport['arrayRendement'][59]->soldeFinCashFlow - $rapport['arrayRendement'][0]->soldeDebutCashFlow);
+		$rapport['totalTotalRendement'] = nbr($rapport['arrayRendement'][59]->soldeFinCashFlow - $rapport['arrayRendement'][0]->soldeDebutCashFlow) * -1;
 
 		/* rendement */
 
 		$n = 11;
 
 		for ($i=1; $i < 6; $i++) { 
-			if ($i < 6){
+			if ($i < 5){
 				$rapport['montantRendementCashFlowAn'.$i] = nbr($rapport['arrayRendement'][$n]->soldeFinCashFlow);
 			}
 			else{
 				$rapport['montantRendementCashFlowAn'.$i] = nbr($rapport['arrayRendement'][$n]->soldeFinCashFlow + $rapport['arrayRendement'][$n]->cashFlow);
 			}
 			$rapport['montantRendementEquityBuiltAn'.$i] = nbr($rapport['pret'] - $rapport['arrayRendement'][$n]->soldeFinDette);
-			$rapport['totalRendementAn'.$i] = nbr($rapport['montantRendementCashFlowAn'.$i] + $rapport['montantRendementEquityBuiltAn'.$i] + $rapport['montantRendementPlusValueAn'.$i]);
+			$rapport['totalRendementAn'.$i] = nbr($rapport['montantRendementCashFlowAn'.$i] + $rapport['montantRendementEquityBuiltAn'.$i] + $rapport['an'.$i.'Montant']);
 			$rapport['pourcRendementCashFlowAn'.$i] = ($rapport['miseDeFond'] > 0) ? nbr(toPourc($rapport['montantRendementCashFlowAn'.$i] / $rapport['miseDeFond'])) : 0;
-			$rapport['pourcRendementEquityBuiltAn'.$i] = ($rapport['miseDeFond'] > 0 && $rapport['pourcRendementCashFlowAn'.$i] > 0) ? nbr(toPourc($rapport['montantRendementEquityBuiltAn'.$i] / ($rapport['miseDeFond'] + fromPourc($rapport['pourcRendementCashFlowAn'.$i])))) : 0;
-			$rapport['pourcRendementPlusValueAn'.$i] = ($rapport['miseDeFond'] > 0 && $rapport['pourcRendementEquityBuiltAn'.$i] > 0) ? nbr(toPourc($rapport['montantRendementPlusValueAn'.$i] / ($rapport['miseDeFond'] + fromPourc($rapport['pourcRendementEquityBuiltAn'.$i])))) : 0;
+			$rapport['pourcRendementEquityBuiltAn'.$i] = ($rapport['miseDeFond'] > 0 && $rapport['pourcRendementCashFlowAn'.$i] > 0) ? nbr((($rapport['montantRendementEquityBuiltAn'.$i] / ($rapport['miseDeFond']) * 100) + $rapport['pourcRendementCashFlowAn'.$i])) : 0;
+			$rapport['pourcRendementPlusValueAn'.$i] = ($rapport['miseDeFond'] > 0 && $rapport['pourcRendementEquityBuiltAn'.$i] > 0) ? nbr((($rapport['an'.$i.'Montant'] / ($rapport['miseDeFond']) * 100) + $rapport['pourcRendementEquityBuiltAn'.$i])) : 0;
 			$rapport['totalRendementAn'.$i.'pourc'] = nbr($rapport['pourcRendementCashFlowAn'.$i] + $rapport['pourcRendementEquityBuiltAn'.$i] + $rapport['pourcRendementPlusValueAn'.$i]);
 			$n += 12;
 		}
 
 		for ($i=1; $i < 6; $i++) { 
-
-			$vM = 'variationAn'.$i.'M';
-			$vP = 'variationAn'.$i.'P';
-			if ($rapport['vAn'.$i] == $vM){
-				$rapport['montantRendementPlusValueAn'.$i] = nbr($rapport['an'.$i.'Montant']);
-			}
-			else if ($rapport['vAn'.$i] == $vP){
-				$rapport['montantRendementPlusValueAn'.$i] = nbr($rapport['an'.$i.'Montant'] + $rapport['montantRendementPlusValueAn'.$i]);
-			}
+                        if($i == 1){
+                            $rapport['montantRendementPlusValueAn'.$i] = nbr($rapport['an'.$i.'Montant']);
+                        } else {
+                            $rapport['montantRendementPlusValueAn'.$i] = nbr($rapport['an'.$i.'Montant'] + $montantPrec);
+                        }
+                        
+                        $montantPrec = nbr($rapport['an'.$i.'Montant']);
 		}
 
 		if ($qualitatifs == null){
@@ -592,37 +590,42 @@ class RapportsController extends AppController {
 class Rendement extends RapportsController{
 	public function Rendement($rapport,$ini){
 		if ($ini){
-			$this->setAll($rapport,1,nbr($rapport['pret']),nbr($rapport['prixPaye'] - $rapport['pret'] + $rapport['totalDépensesInitiales']),nbr($rapport['pret'] - $rapport['prixPaye']),nbr($rapport['totalRBE'] / 12),nbr($rapport['totalDépensesInitiales'] * -1),0);
+			$this->setAll($rapport,1,$rapport['pret'],nbr($rapport['prixPaye'] - $rapport['pret']),nbr($rapport['prixPaye'] - $rapport['pret'] + $rapport['totalDépensesInitiales']),nbr($rapport['pret'] - $rapport['prixPaye']),nbr($rapport['totalRBE'] / 12),nbr($rapport['totalDépensesInitiales'] * -1),0);
 		}
 	}
 
 	public function initializeApresRendement($precRendement,$rapport){
-		$this->setAll($rapport,$precRendement->periode + 1,$precRendement->soldeFinDette,$precRendement->soldeFinCashFlow,0,$precRendement->revenu,0,nbr($this->soldeFinCashFlow - $precRendement->soldeFinCashFlow));
-	}
+            $this->setAll($rapport,$precRendement->periode + 1,$precRendement->soldeFinDette,$precRendement->soldeFinDette,$precRendement->soldeFinCashFlow,0,$precRendement->revenu,0,$precRendement->soldeFinCashFlow);     
+         }
 
-	private function setAll($rapport,$periode,$soldeDebutDette,$soldeDebutCashFlow,$investissementInitial,$revenu,$depensesInitial,$cashFlow){
+	private function setAll($rapport,$periode,$soldeDebut,$soldeDebutDette,$soldeDebutCashFlow,$investissementInitial,$revenu,$depensesInitial,$cashFlow){
 		$this->periode = $periode;
-
 		/* évolution de la dette */
-
+                
+                $this->soldeDebut = $soldeDebut;
 		$this->soldeDebutDette = $soldeDebutDette;
 		$this->paiementDette = 0;
-		$this->interetDette = nbr($this->soldeDebutDette * (fromPourc($rapport['tauxInteret']) / 12));
+		$this->interetDette = nbr($this->soldeDebut * (fromPourc($rapport['tauxInteret']) / 12));
 		$this->capitalDette = nbr($rapport['remboursementMensuel'] - $this->interetDette);
-		$this->soldeFinDette = nbr($this->soldeDebutDette - $this->capitalDette);
+		$this->soldeFinDette = nbr($this->soldeDebut - $this->capitalDette);
 
 		/* évolution du cash flow */
-
 		$this->soldeDebutCashFlow = $soldeDebutCashFlow;
 		$this->investissementInitial = $investissementInitial;
-		$this->revenu = $revenu;
+                
+		if($periode == 13 || $periode == 25 || $periode == 37 || $periode == 49){
+                    $this->revenu = nbr($revenu * (1+($rapport['pourcTotalAugmentationAnnuelle'] / 100)));
+                } else{
+                    $this->revenu = $revenu;
+                }
+                
 		$this->hypotheque = nbr(($this->capitalDette + $this->interetDette) * -1);
 		$this->depensesMensuel = nbr(($rapport['totalDépensesAnnuel'] / 12) * -1);
 		$this->depensesInitial = $depensesInitial;
 		$this->vente = 0;
 		$this->rembHypotheque = 0;
-		$this->soldeFinCashFlow = nbr($this->soldeDebutDette + $this->investissementInitial + $this->revenu + $this->hypotheque + $this->depensesMensuel + $this->depensesInitial + $this->vente + $this->rembHypotheque);
-		$this->cashFlow = $cashFlow;
+		$this->soldeFinCashFlow = nbr($this->soldeDebutCashFlow + $this->investissementInitial + $this->revenu + $this->hypotheque + $this->depensesMensuel + $this->depensesInitial + $this->vente + $this->rembHypotheque);
+                $this->cashFlow = nbr($this->soldeFinCashFlow - $cashFlow);
 	}
 }
 

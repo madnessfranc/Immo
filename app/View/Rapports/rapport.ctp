@@ -1400,7 +1400,7 @@
 						?>
             <tr>
                 <td><?php echo $value->periode; ?></td>
-                <td><?php echo $value->soldeDebutDette; ?></td>
+                <td><?php echo $value->soldeDebut; ?></td>
                 <td><?php echo $value->paiementDette; ?></td>
                 <td><?php echo $value->capitalDette; ?></td>
                 <td><?php echo $value->interetDette; ?></td>
